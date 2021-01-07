@@ -40,9 +40,9 @@ is_aug_lumi = int(is_aug_lumi)
 # Data
 list_data = [
     'batch_1wave', # 0
-    'batch_1wave_4light' # 1
+    'batch_1wave_4light', # 1
     'batch_1wave-double', # 2
-    'batch_1wave-double_4light' # 3
+    'batch_1wave-double_4light', # 3
     ]
 
 def main():
@@ -64,7 +64,7 @@ def main():
 
     # Data
     name_data = list_data[data_type]
-    info_data = I.data_type[name_data]
+    info_data = I.data_dict[name_data]
     dir_data = I.dir_root_data + info_data['name']
 
     # Generator

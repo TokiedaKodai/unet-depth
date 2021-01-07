@@ -7,7 +7,7 @@ thre_diff = 0.01
 # Directory
 dir_root_data = '../data/'
 dir_root_model = '../models/'
-dir_root_output = '../outputs'
+dir_root_output = '../outputs/'
 # Input
 is_input_depth = True
 is_input_frame = True
@@ -38,7 +38,7 @@ batch_wave1double_400 = {
     'size_val': 168
 }
 
-data_type = {
+data_dict = {
     'batch_1wave': batch_wave1_100,
     'batch_1wave_4light': batch_wave1_400,
     'batch_1wave-double': batch_wave1double_200,
