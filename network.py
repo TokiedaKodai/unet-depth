@@ -17,7 +17,7 @@ def BuildUnet(
     rate_dropout,
     is_transfer_learn=False,
     is_transfer_encoder=False,
-    shape_patch=I.shape_patch
+    shape_patch=cf.shape_patch
 ):
     def EncodeBlock(x, ch):
         def BaseEncode(x):
