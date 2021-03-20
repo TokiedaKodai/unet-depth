@@ -28,12 +28,12 @@ batch_wave1_400 = {
     'size_val': 80
 }
 batch_wave1double_200 = {
-    'name': 'batch_1wave-double',
+    'name': 'batch_wave1-double_200',
     'size_train': 94,
     'size_val': 40
 }
 batch_wave1double_400 = {
-    'name': 'batch_1wave-double_4light',
+    'name': 'batch_wave1-double_800',
     'size_train': 395,
     'size_val': 168
 }

@@ -13,6 +13,7 @@ import info as I
 # Learning Parameters
 num_epoch = 300
 num_ch = 3
+num_ch = 2
 size_batch = 64
 size_train = 70
 size_val = 30
@@ -32,10 +33,11 @@ ARGV
 4-6: parameter
 '''
 argv = sys.argv
-_, name_model, data_type, num_epoch, is_aug_lumi = argv
+_, name_model, data_type, num_epoch, is_aug_lumi, is_aug_lumi_val = argv
 data_type = int(data_type)
 num_epoch = int(num_epoch)
 is_aug_lumi = int(is_aug_lumi)
+is_aug_lumi_val = int(is_aug_lumi_val)
 
 # Data
 list_data = [
@@ -76,7 +78,9 @@ def main():
     val_generator = TT.MiniBatchGenerator(
         dir_data + '/val', 
         info_data['size_val'], 
-        size_val)
+        size_val,
+        is_aug_lumi=False,
+        is_aug_lumi_val=is_aug_lumi_val)
 
     model = NT.BuildUnet(
         num_ch=num_ch,

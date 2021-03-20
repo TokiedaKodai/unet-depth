@@ -13,21 +13,27 @@ import info as I
 # is_aug_lumi = False
 lumi_scale_range = [0.5, 1.5]
 class MiniBatchGenerator(Sequence):
-    def __init__(self, dir_name, data_num, use_num, is_aug_lumi=False):
+    def __init__(self, dir_name, data_num, use_num, is_aug_lumi=False, is_aug_lumi_val=False):
         self.data_size = data_num
         self.batches_per_epoch = use_num
         self.x_file = dir_name + '/x/{:05d}.npy'
         self.y_file = dir_name + '/y/{:05d}.npy'
         self.is_aug_lumi = is_aug_lumi
+        self.is_aug_lumi_val = is_aug_lumi_val
+        if is_aug_lumi_val:
+            self.aug_scale_list = [random.uniform(lumi_scale_range[0], lumi_scale_range[1]) for i in range(data_num)]
 
     def __getitem__(self, idx):
         random_idx = random.randrange(0, self.data_size)
         x_batch = np.load(self.x_file.format(random_idx))
         y_batch = np.load(self.y_file.format(random_idx))
+        aug_scale = 1
         if self.is_aug_lumi:
             aug_scale = random.uniform(lumi_scale_range[0], lumi_scale_range[1])
-            x_batch[:, :, :, 0] *= aug_scale
-            x_batch[:, :, :, 2] *= aug_scale
+        elif self.is_aug_lumi_val:
+            aug_scale = self.aug_scale_list[random_idx]
+        x_batch[:, :, :, 0] *= aug_scale
+        x_batch[:, :, :, 2] *= aug_scale
         return x_batch, y_batch
 
     def __len__(self):
