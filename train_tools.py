@@ -5,7 +5,7 @@ import random
 
 from keras.utils import Sequence
 
-import info as I
+import config as cf
 # import depth_tools as DT
 
 

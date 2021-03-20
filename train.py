@@ -8,7 +8,7 @@ from keras.callbacks import CSVLogger, ModelCheckpoint
 
 import network as NT
 import train_tools as TT
-import info as I
+import config as cf
 
 # Learning Parameters
 num_epoch = 300
@@ -48,11 +48,11 @@ list_data = [
     ]
 
 def main():
-    # info_data = I.info_2wave
+    # info_data = cf.info_2wave
     # x_data, y_data = TT.LoadData(dir_data, range_data, info_data['save_file'])
 
     # Dir Model
-    dir_model = I.dir_root_model + name_model + '/'
+    dir_model = cf.dir_root_model + name_model + '/'
     os.makedirs(dir_model, exist_ok=True)
 
     # Resume
@@ -66,8 +66,8 @@ def main():
 
     # Data
     name_data = list_data[data_type]
-    info_data = I.data_dict[name_data]
-    dir_data = I.dir_root_data + info_data['name']
+    info_data = cf.data_dict[name_data]
+    dir_data = cf.dir_root_data + info_data['name']
 
     # Generator
     train_generator = TT.MiniBatchGenerator(

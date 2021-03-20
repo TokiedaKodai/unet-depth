@@ -17,7 +17,7 @@ import network
 import depth_tools
 import common_tools
 import compare_error
-import info as I
+import config as cf
 
 '''
 ARGV

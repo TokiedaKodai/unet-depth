@@ -5,10 +5,10 @@ from keras.models import Model
 import keras.backend as K
 from keras import optimizers
 
-import info as I
+import config as cf
 
-thre_depth = I.thre_depth
-thre_diff = I.thre_diff
+thre_depth = cf.thre_depth
+thre_diff = cf.thre_diff
 thre_diff = 1
 
 def BuildUnet(
