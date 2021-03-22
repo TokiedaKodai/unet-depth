@@ -612,9 +612,6 @@ def main():
         depth_err = depth_err_abs
         predict_err = predict_err_abs
         predict_err_masked = predict_err * mask
-
-        # depth_err = depth_err_diff
-        # predict_err_masked = (depth_gt - predict_depth) * mask
         #################################################################
 
         # Mean Absolute Error
