@@ -11,7 +11,7 @@ from matplotlib.cm import ScalarMappable
 import io
 import sys
 import pandas as pd
-import cupy as cp
+import argparse
 
 import network
 import depth_tools
@@ -23,17 +23,24 @@ import config as cf
 ARGV
 1: output dir
 2: epoch num
-3: is predict norm
+3: data type
 '''
-argv = sys.argv
-_, out_dir, epoch_num, data_type = argv # output dir, epoch
+# Parser
+parser = argparse.ArgumentParser()
+parser.add_argument('name', help='model name to use training and test')
+parser.add_argument('epoch', type=int, help='end epoch num')
+parser.add_argument('data', type=int, help='[0 - 3]: data type')
+args = parser.parse_args()
+
+out_dir = args.name
+epoch_num = args.epoch
+data_type = args.data
+
 
 net_type = '0'
 
 out_dir = '../output/output_' + out_dir
-# out_dir = '../output/archive/200318/output_' + out_dir
 
-epoch_num = int(epoch_num)
 
 # normalization
 is_shading_norm = True
@@ -609,83 +616,6 @@ def main():
             patch_size = norm_patch_size
 
             if is_norm_local_pix:
-                # cp.cuda.set_allocator(cp.cuda.MemoryPool().malloc)
-                # mask_float = mask * 1.0
-                # kernel = np.ones((patch_size, patch_size))
-                # patch_mask_len = cv2.filter2D(mask_float, -1, kernel, borderType=cv2.BORDER_CONSTANT).astype('int16')
-                # patch_gt_sum = cv2.filter2D(gt_diff, -1, kernel, borderType=cv2.BORDER_CONSTANT)
-                # patch_pred_sum = cv2.filter2D(predict_diff_masked, -1, kernel, borderType=cv2.BORDER_CONSTANT)
-                # print(patch_mask_len[800:810, 800:810])
-                # print(np.min(patch_mask_len))
-                # print(patch_gt_sum[800:810, 800:810])
-                # print(patch_pred_sum[800:810, 800:810])
-                # patch_gt_mean = np.where(patch_mask_len < 10, 0, patch_gt_sum / patch_mask_len)
-                # patch_pred_mean = np.where(patch_mask_len < 10, 0, patch_pred_sum / patch_mask_len)
-                # print(patch_gt_mean[800:810, 800:810])
-                # print(patch_pred_mean[800:810, 800:810])
-                # print(np.max(patch_gt_mean))
-                # print(np.max(patch_pred_mean))
-                # print(patch_gt_mean)
-
-                # gt_diff_cp = cp.asarray(gt_diff).astype(cp.float32)
-                # pred_diff_cp = cp.asarray(predict_diff_masked).astype(cp.float32)
-                # mask_cp = cp.asarray(mask_float).astype(cp.float32)
-                # mask_len_cp = cp.asarray(patch_mask_len).astype(cp.float32)
-                # patch_gt_mean_cp = cp.asarray(patch_gt_mean).astype(cp.float32)
-                # patch_pred_mean_cp = cp.asarray(patch_pred_mean).astype(cp.float32)
-
-                # new_pred_diff = cp.zeros_like(pred_diff_cp)
-                # new_mask = cp.zeros_like(mask_cp)
-                # height, width = pred_diff_cp.shape
-                # get_norm_pred = cp.ElementwiseKernel(
-                #     in_params='raw float32 gt_diff, raw float32 pred_diff, raw float32 mask, raw float32 mask_len, raw float32 gt_mean, raw float32 pred_mean, int16 height, int16 width, int16 patch_size',
-                #     out_params='float32 new_pred_diff, float32 new_mask',
-                #     preamble=\
-                #     '''
-                #     __device__ int get_x_idx(int i, int width) {
-                #         return i % width;
-                #     }
-                #     __device__ int get_y_idx(int i, int height) {
-                #         return i / height;
-                #     }
-                #     ''',
-                #     operation=\
-                #     '''
-                #     int x = get_x_idx(i, width);
-                #     int y = get_y_idx(i, height);
-                #     int diameter = patch_size;
-                #     int distance = (diameter - 1) / 2;
-                #     if ( ((x >= distance) && (x < width - distance)) && ((y >= distance) && (y < height - distance)) && (mask[i] > 0) ) {
-                #         if (mask_len[i] > 10) {
-                #             float gt_sum = 0;
-                #             float pred_sum = 0;
-                #             for (int k=0; k<diameter; k++) {
-                #                 for (int l=0; l<diameter; l++) {
-                #                     float pixel_gt = gt_diff[i + (k-distance)*width + l - distance] - gt_mean[i];
-                #                     float pixel_pred = pred_diff[i + (k-distance)*width + l - distance] - pred_mean[i];
-                #                     gt_sum += pixel_gt * pixel_gt;
-                #                     pred_sum += pixel_pred * pixel_pred;
-                #                 }
-                #             }
-                #             float sd_gt = gt_sum;
-                #             float sd_pred = pred_sum;
-                #             new_pred_diff[i] = (pred_diff[i] - pred_mean[i]) * (sd_gt / sd_pred) + gt_mean[i];
-                #             new_mask[i] = 1;
-                #         } else {
-                #             new_mask[i] = 0;
-                #             new_pred_diff[i] = 0;
-                #         }
-                #     } else {
-                #         new_mask[i] = 0;
-                #         new_pred_diff[i] = 0;
-                #     }
-                #     ''',
-                #     name='get_norm_pred'
-                # )
-                # get_norm_pred(gt_diff_cp, pred_diff_cp, mask_cp, mask_len_cp, patch_gt_mean_cp, patch_pred_mean_cp, height, width, patch_size, new_pred_diff, mask_cp)
-                # predict_diff = cp.asnumpy(new_pred_diff)
-                # mask = cp.asnumpy(new_mask)
-
                 p = norm_patch_size
                 new_pred_diff = np.zeros_like(predict_diff_masked)
                 new_mask = mask.copy()
