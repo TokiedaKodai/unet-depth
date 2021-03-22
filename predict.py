@@ -36,86 +36,51 @@ out_dir = args.name
 epoch_num = args.epoch
 data_type = args.data
 
-
-net_type = '0'
-
 out_dir = '../output/output_' + out_dir
 
 
 # normalization
-is_shading_norm = True
 is_shading_norm = False
 
 # parameters
 depth_threshold = 0.2
-# difference_threshold = 0.1
 difference_threshold = 0.005
-# difference_threshold = 0.003
 patch_remove = 0.5
 
-# train_std = 0.0019195375434992092
-
-train_std = 0.0014782568217017 # 1 wave
-
-
-# difference_scaling = 100
-# difference_scaling = 1000
-difference_scaling = 1
-# difference_scaling = int(scale)
-# difference_scaling = 1 / train_std # Scale by SD
 
 # input
 is_input_depth = True
 is_input_frame = True
 is_input_coord = False
-# is_input_coord = True
 
 img_size = 1200
 
 #select model
-# save_period = 10
 save_period = 1
 
 # select_range = save_period * 10
 select_range = epoch_num / 2
-select_range = 200
 select_range = 300
 
 is_edge_crop = True
-mask_edge_size = 1
-mask_edge_size = 2
 mask_edge_size = 4
-# mask_edge_size = 8
-# mask_edge_size = 16
-# mask_edge_size = 32
-# mask_edge_size = 64
 
 patch_rate = 50
 patch_rate = 95 # %
 
-#InputData
-# src_dir = '../data/input_200201'
-# src_dir = '../data/input_200302'
-# src_dir = '../data/input_200201-0312/'
 
 if data_type is '0':
-    # src_dir = '../data/input_200318'
     src_dir = '../data/board'
     predict_dir = out_dir + '/predict_{}_board'.format(epoch_num)
     predict_dir = out_dir + '/predict_{}_board-clip'.format(epoch_num)
-    # predict_dir = out_dir + '/predict_{}_board-median'.format(epoch_num)
-    # predict_dir = out_dir + '/predict_{}_trans'.format(epoch_num)
-    # predict_dir = out_dir + '/predict_{}_board_test_cp'.format(epoch_num)
     data_num = 68
     data_idx_range = list(range(data_num))
 elif data_type is '1':
     src_dir = '../data/render'
     src_dir = '../data/render_wave1_300'
     predict_dir = out_dir + '/predict_{}_1wave'.format(epoch_num)
-    data_num = 100
     data_num = 200
     test_num = 20
-    # test_num = 40
     data_idx_range = list(range(data_num, data_num + test_num))
     difference_threshold = 0.1
 elif data_type is '2':
@@ -128,8 +93,6 @@ elif data_type is '2':
 elif data_type is '3':
     src_dir = '../data/real'
     predict_dir = out_dir + '/predict_{}_real'.format(epoch_num)
-    # predict_dir = out_dir + '/predict_{}_real-median'.format(epoch_num)
-    data_num = 9
     data_num = 19
     data_idx_range = list(range(data_num))
     mask_edge_size = 2
@@ -138,45 +101,28 @@ elif data_type is '3':
 
 # save predict depth PLY file
 is_save_ply = True
-# is_save_ply = False
-
 is_masked_ply = True
-
-is_save_diff = True
 is_save_diff = False
-
 is_save_depth_img = True
-# is_save_depth_img = False
 
 # predict normalization
 is_predict_norm = True # Difference Normalization
-# is_predict_norm = False
 is_predict_norm_local = True # Difference Normalization Local
-# is_predict_norm_local = False
 norm_patch_size = 12
-# norm_patch_size = 24
-# norm_patch_size = 48
 is_norm_local_pix = False
-is_norm_local_pix = True
 norm_patch_size = 13
 norm_patch_size = 6
 norm_patch_size = 12
 norm_patch_size = 24
-# norm_patch_size = 48
 
-is_fix_inv_local = True
 is_fix_inv_local = False
-
-is_pred_ajust = True
 is_pred_ajust = False
 
 # select from val loss
 is_select_val = True
-# is_select_val = False
 
 # select minimum loss model
 is_select_min_loss_model = True
-# is_select_min_loss_model = False
 
 # Reverse #############################
 is_pred_reverse = False
@@ -184,16 +130,8 @@ is_pred_pix_reverse = False
 is_reverse_threshold = False
 is_pred_patch_inverse = False
 
-# is_pred_reverse = True
-# is_pred_pix_reverse = True
-# is_reverse_threshold = True
-# is_pred_patch_inverse = True
-
-r_thre = 0.002
 r_thre = 0.001
 #######################################
-
-is_pred_smooth = True
 is_pred_smooth = False
 
 if is_predict_norm:
@@ -239,74 +177,30 @@ mid 110cm : 56 - 59
 # train data
 # test data
 if data_type is '0':
-    # train_range = list(range(16)) # 0 - 16, 24 - 40
-    # train_range.extend(list(range(24, 40)))
-    # train_range.extend(list(range(40, 44))) # 40 - 44
-    # train_range.extend(list(range(48, 56))) # 48 - 56, 60 - 68
-    # train_range.extend(list(range(60, 68)))
-
-    # train_range = [0, 1, 3, 6, 40, 41, 42, 43, 48, 49, 50, 51]
-    # train_range = [0, 1, 3, 6, 16, 17, 19, 22]
-    # train_range = list(range(40))
     train_range = list(range(16))
-
-
-    # test_range = list(range(16, 24)) # 16 - 24
-    # test_range.extend(list(range(44, 48))) # 44 - 48
-    # test_range.extend(list(range(56, 60))) # 56 - 60
-
-    # data_idx_range = [16, 17, 19, 22, 44, 45, 46, 47, 52, 53, 54, 55]
-    # test_range =     [16, 17, 19, 22, 44, 45, 46, 47, 52, 53, 54, 55]
-
     data_idx_range = list(range(40, 56))
     test_range = list(range(40, 56))
-
-    # data_idx_range = [0, 1, 3, 6, 16, 17, 19, 22]
-    # data_idx_range.extend(list(range(40, 56)))
-
-    # data_idx_range = list(range(56))
 elif data_type is '1':
-    train_range = list(range(80))
-    train_range = list(range(160))
-    # train_range = list(range(200))
-    # train_range = list(range(320))
-
     train_range = list(range(data_num))
-
-    test_range = list(range(80, 100))
-    test_range = list(range(160, 200))
-    # test_range = list(range(200, 240))
-    # test_range = list(range(320, 400))
     test_range = data_idx_range
 elif data_type is '2':
     train_range = list(range(data_num))
-
     test_range = data_idx_range
 elif data_type is '3':
     train_range = list()
-
-    test_range = list(range(9))
     test_range = list(range(19))
-
 
 
 # save ply range
 save_ply_range = test_range
-
 save_img_range = test_range
 
 
 vmin, vmax = (0.8, 1.4)
-vm_range = 0.05
 vm_range = 0.03
-# vm_e_range = 0.005
-vm_e_range = 0.003
 vm_e_range = 0.002
-# vm_e_range = 0.001
-# vm_e_range = difference_threshold
 
 batch_shape = (1200, 1200)
-# batch_shape = (600, 600)
 batch_tl = (0, 0)  # top, left
 
 # calib 200317
@@ -329,8 +223,6 @@ cam_params = {
 def main():
     if data_type is '0':
         src_rec_dir = src_dir + '/rec'
-        # src_rec_dir = src_dir + '/rec_ajusted'
-        # src_rec_dir = src_dir + '/lowres' ############################ median filter depth
         src_frame_dir = src_dir + '/frame'
         src_gt_dir = src_dir + '/gt'
         src_shading_dir = src_dir + '/shading'
@@ -349,8 +241,6 @@ def main():
         src_gt_dir = src_dir + '/gt'
         src_shading_dir = src_dir + '/shade'
         src_rec_dir = src_dir + '/rec'
-        # src_rec_dir = src_dir + '/lowres'
-
 
     if is_input_depth:
         if is_input_frame:
@@ -366,12 +256,7 @@ def main():
             ch_num = 1
 
     # model configuration
-    if net_type is '0':
-        model = network.build_unet_model(batch_shape, ch_num)
-    elif net_type is '1':
-        model = network.build_resnet_model(batch_shape, ch_num)
-    elif net_type is '2':
-        model = network.build_dense_resnet_model(batch_shape, ch_num)
+    model = network.build_unet_model(batch_shape, ch_num)
     
     # log
     df_log = pd.read_csv(out_dir + '/training.log')
@@ -424,10 +309,8 @@ def main():
     for test_idx in tqdm(data_idx_range):
         if data_type is '0':
             src_bgra = src_frame_dir + '/frame{:03d}.png'.format(test_idx)
-            # src_depth_gap = src_rec_dir + '/depth{:03d}.png'.format(test_idx)
             src_depth_gap = src_rec_dir + '/depth{:03d}.bmp'.format(test_idx)
             src_depth_gt = src_gt_dir + '/gt{:03d}.bmp'.format(test_idx)
-            # src_shading = src_shading_dir + '/shading{:03d}.png'.format(test_idx)
             src_shading = src_shading_dir + '/shading{:03d}.bmp'.format(test_idx)
         elif data_type is '1':
             src_bgra = src_frame_dir + '/{:05d}.png'.format(test_idx)
@@ -442,7 +325,6 @@ def main():
         elif data_type is '3':
             src_bgra = src_frame_dir + '/{:05d}.png'.format(test_idx)
             src_depth_gt = src_gt_dir + '/{:05d}.bmp'.format(test_idx)
-            # src_shading = src_shading_dir + '/{:05d}.bmp'.format(test_idx)
             src_shading = src_shading_dir + '/{:05d}.png'.format(test_idx)
             src_depth_gap = src_rec_dir + '/{:05d}.bmp'.format(test_idx)
 
@@ -451,7 +333,6 @@ def main():
         bgr = bgr[:1200, :1200, :] 
         depth_img_gap = cv2.imread(src_depth_gap, -1)
         depth_img_gap = depth_img_gap[:1200, :1200, :]
-        # depth_gap = depth_tools.unpack_png_to_float(depth_img_gap)
         depth_gap = depth_tools.unpack_bmp_bgra_to_float(depth_img_gap)
 
         depth_img_gt = cv2.imread(src_depth_gt, -1)
@@ -459,7 +340,6 @@ def main():
         depth_gt = depth_tools.unpack_bmp_bgra_to_float(depth_img_gt)
         img_shape = bgr.shape[:2]
 
-        # shading_bgr = cv2.imread(src_shading, -1)
         shading_bgr = cv2.imread(src_shading, 1)
         shading_bgr = shading_bgr[:1200, :1200, :]
         shading_gray = cv2.imread(src_shading, 0) # GrayScale
@@ -468,13 +348,10 @@ def main():
 
         is_shading_available = shading > 0
         mask_shading = is_shading_available * 1.0
-        # depth_gap = depth_gt[:, :] * mask_shading
-        # mean_depth = np.sum(depth_gap) / np.sum(mask_shading)
-        # depth_gap = mean_depth * mask_shading
         depth_gap *= mask_shading
 
         if is_shading_norm: # shading norm : mean 0, var 1
-            is_shading_available = shading > 8.0#16.0
+            is_shading_available = shading > 8.0
             mask_shading = is_shading_available * 1.0
             mean_shading = np.sum(shading*mask_shading) / np.sum(mask_shading)
             var_shading = np.sum(np.square((shading - mean_shading)*mask_shading)) / np.sum(mask_shading)
@@ -483,16 +360,6 @@ def main():
         else:
             shading = shading / 255.
 
-        # is_depth_available = depth_gt > depth_threshold
-        # mask_depth = is_depth_available * 1.0
-        # depth_gap = np.zeros_like(depth_gt)
-        # mean_depth = np.sum(depth_gt) / np.sum(mask_depth)
-        # depth_gap = mean_depth * mask_depth
-
-        # normalization (may not be needed)
-        # norm_factor = depth_gap.max()
-        # depth_gap /= norm_factor
-        # depth_gt /= depth_gt.max()
 
         depth_thre = depth_threshold
 
@@ -536,12 +403,6 @@ def main():
         # predict
         x_test = np.array(x_test)[:]
         predict = model.predict(x_test, batch_size=1)  # w/o denormalization
-        # predict = model.predict(
-        #     x_test, batch_size=1) * norm_factor  # w/ denormalization
-        # decode_img = np.hstack([
-        #     np.vstack([predict[0], predict[2]]),
-        #     np.vstack([predict[1], predict[3]])
-        # ])[:, :, 0:2]
         decode_img = predict[0][:, :, 0:2]
 
         # training types
@@ -556,8 +417,6 @@ def main():
         train_segment = np.zeros(decode_img.shape[:2])
         train_segment[is_depth_close] = 1
         train_segment[is_to_interpolate] = 2
-
-        # is_train_area = np.logical_or(is_depth_close, is_to_interpolate)
 
         # mask = is_gt_available * 1.0 # GT
         mask = is_depth_close * 1.0 # no-complement
@@ -607,10 +466,6 @@ def main():
         gt_diff = (depth_gt - depth_gap) * mask
         predict_diff_masked = predict_diff * mask
 
-        # scale
-        predict_diff /= difference_scaling
-        predict_diff_masked /= difference_scaling
-
         # predict normalization
         if is_predict_norm_local:
             patch_size = norm_patch_size
@@ -655,12 +510,8 @@ def main():
                 mask[batch_shape[0] - p:, :] = False
                 mask[:, :p] = False
                 mask[:, batch_shape[1] - p:] = False
-                # print(mask[40:60, 1140:1160])
                 mask *= 1.0
-                # print(mask_length)
-                # print(mask[40:60, 1140:1160])
                 mask_length = np.sum(mask)
-                # print(mask_length)
             else:
                 for i in range(batch_shape[0] // p):
                     for j in range(batch_shape[1] // p):
@@ -704,10 +555,6 @@ def main():
 
             # ajust bias, calc error
             if is_pred_ajust:
-                # mean_gt_diff = np.sum(gt_diff) / mask_length
-                # mean_out_dif = np.sum(out_diff * mask) / mask_length
-                # bias_out_dif = mean_out_dif - mean_gt_diff
-                # out_diff_ajusted = out_diff - bias_out_dif
                 mean_depth_gt = np.sum(depth_gt_masked) / mask_length
                 mean_depth_pred = np.sum(predict_masked) / mask_length
                 predict_depth += mean_depth_gt - mean_depth_pred
@@ -717,8 +564,6 @@ def main():
             depth_err_abs_R = np.abs(depth_gt - depth_gap)
             depth_err_sqr_R = np.square(depth_gt - depth_gap)
             if is_pred_ajust:
-                # predict_err_abs_R = np.abs(gt_diff - out_diff_ajusted)
-                # predict_err_sqr_R = np.square(gt_diff - out_diff_ajusted)
                 predict_err_abs_R = np.abs(depth_gt - predict_depth)
                 predict_err_sqr_R = np.square(depth_gt - predict_depth)
             else:
@@ -747,10 +592,6 @@ def main():
 
         # ajust bias, calc error
         if is_pred_ajust:
-            # mean_gt_diff = np.sum(gt_diff) / mask_length
-            # mean_out_dif = np.sum(out_diff * mask) / mask_length
-            # bias_out_dif = mean_out_dif - mean_gt_diff
-            # out_diff_ajusted = out_diff - bias_out_dif
             mean_depth_gt = np.sum(depth_gt_masked) / mask_length
             mean_depth_pred = np.sum(predict_masked) / mask_length
             predict_depth += mean_depth_gt - mean_depth_pred
@@ -761,8 +602,6 @@ def main():
         depth_err_sqr = np.square(depth_gt - depth_gap)
         depth_err_diff = depth_gt - depth_gap
         if is_pred_ajust:
-            # predict_err_abs = np.abs(gt_diff - out_diff_ajusted)
-            # predict_err_sqr = np.square(gt_diff - out_diff_ajusted)
             predict_err_abs = np.abs(depth_gt - predict_depth)
             predict_err_sqr = np.square(depth_gt - predict_depth)
         else:
@@ -932,11 +771,6 @@ def main():
 
             # misc
             ax_misc0.imshow(shading_bgr[:, :, ::-1])
-            # ax_misc0.imshow(np.dstack([shading_gray, shading_gray, shading_gray]))
-
-            # shading_norm_img = (shading[:, :] * 64 + 128)
-            # shading_norm_img = np.where(shading_norm_img < 0, 0, shading_norm_img).astype(np.uint8)
-            # ax_misc0.imshow(np.dstack([shading_norm_img, shading_norm_img, shading_norm_img]))
 
             # error
             is_scale_err_mm = True
@@ -948,20 +782,6 @@ def main():
             vmin_e, vmax_e = 0, vm_e_range * scale_err
             ax_err_gap.imshow(depth_err * mask * scale_err, cmap='jet', vmin=vmin_e, vmax=vmax_e)
             ax_err_pred.imshow(predict_err_masked * scale_err, cmap='jet', vmin=vmin_e, vmax=vmax_e)
-
-            # vmin_e, vmax_e = -1 * vm_e_range * scale_err, vm_e_range * scale_err
-            # # ax_err_gap.imshow(depth_err * mask * scale_err, cmap='coolwarm', vmin=vmin_e, vmax=vmax_e)
-            # # ax_err_pred.imshow(predict_err_masked * scale_err, cmap='coolwarm', vmin=vmin_e, vmax=vmax_e)
-            # ax_err_gap.imshow(depth_err * mask * scale_err, cmap='jet', vmin=vmin_e, vmax=vmax_e)
-            # ax_err_pred.imshow(predict_err_masked * scale_err, cmap='jet', vmin=vmin_e, vmax=vmax_e)
-
-
-            # title
-            # ax_enh0.set_title('Groud Truth')
-            # ax_enh1.set_title('Input Depth')
-            # ax_enh2.set_title('Predict')
-            # ax_err_gap.set_title('')
-            # ax_err_pred.set_title('')
 
             # colorbar
             plt.tight_layout()
@@ -981,9 +801,6 @@ def main():
             plt.colorbar(ScalarMappable(colors.Normalize(vmin=vmin_e, vmax=vmax_e),
                                         cmap='jet'),
                         cax=ax_cb1)
-            # plt.colorbar(ScalarMappable(colors.Normalize(vmin=vmin_e, vmax=vmax_e),
-            #                             cmap='coolwarm'),
-            #             cax=ax_cb1)
             im_pos, cb_pos = ax_err_pred.get_position(), ax_cb1.get_position()
             ax_cb1.set_position([
                 cb_pos.x0 + cb_offset, im_pos.y0, cb_pos.x1 - cb_pos.x0,
@@ -995,16 +812,12 @@ def main():
                 ax_cb1.set_xlabel('                [m]')
 
             plt.savefig(predict_dir + '/result-{:03d}.png'.format(test_idx), dpi=300)
-            # plt.savefig(predict_dir + '/result-dif-{:03d}.png'.format(test_idx), dpi=300)
-            # plt.savefig(predict_dir + '/result-dif-{:03d}.jpg'.format(test_idx), dpi=300)
-            # plt.savefig(predict_dir + '/result-{:03d}.pdf'.format(test_idx), dpi=300)
             plt.close()
 
     with open(predict_dir + '/error_compare.txt', mode='w') as f:
         f.write(err_strings)
 
     compare_error.compare_error(predict_dir + '/')
-    # compare_error.compare_error(predict_dir + '/', error='MAE')
 
 if __name__ == "__main__":
     main()
